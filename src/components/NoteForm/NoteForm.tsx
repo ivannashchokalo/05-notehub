@@ -3,8 +3,8 @@ import css from "./NoteForm.module.css";
 import { useId } from "react";
 import * as Yup from "yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNote, deleteNote } from "../services/noteService";
-import { Note } from "../types/note";
+import { createNote, deleteNote } from "../../services/noteService";
+import { Note } from "../../types/note";
 
 interface NoteFormProps {
   onCloseModal: () => void;
