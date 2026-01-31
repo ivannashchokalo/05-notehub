@@ -14,15 +14,19 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  const handleDebouncedSearch = useDebouncedCallback((value: string) => {
+    setSearch(value);
+    setPage(1);
+  }, 500);
 
   const { data, isLoading, isFetching, isError } = useQuery({
-    queryKey: ["notes", page, debouncedSearch],
+    queryKey: ["notes", page, search],
     queryFn: () =>
       fetchNotes({
         page,
         perPage: 12,
-        search: debouncedSearch,
+        search: search,
       }),
   });
 
@@ -31,11 +35,6 @@ export default function App() {
       toast.error("Failed to load notes");
     }
   }, [isError]);
-
-  const handleDebouncedSearch = useDebouncedCallback((value: string) => {
-    setDebouncedSearch(value);
-    setPage(1);
-  }, 500);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -46,7 +45,6 @@ export default function App() {
         <SearchBox
           value={search}
           onChange={(value) => {
-            setSearch(value);
             handleDebouncedSearch(value);
           }}
         />
